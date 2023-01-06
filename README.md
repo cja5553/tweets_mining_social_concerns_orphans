@@ -11,4 +11,4 @@ While the impact of COVID-19 on society has been widely studied, research on the
 
 ## Research Design & Methods
 
-Data Cleaning --> Text Analysis (Topic Modeling & Sentiment/Emotion classification) --> Regression Analysis
+Data Cleaning --> Text Analysis (Topic Modeling & Sentiment/Emotion classification) --> Regression Analysis (includes visualization)
