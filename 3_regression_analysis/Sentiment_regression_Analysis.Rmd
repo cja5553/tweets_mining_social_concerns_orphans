@@ -27,7 +27,7 @@ df<-merge(data,covid,by.x="Date",by.y="date",all.x = T)
 df$t<-1:NROW(df)
 ```
 
-# Tweet Counts
+# Analyzing Tweet Counts
 
 ## wAIC scores
 
@@ -63,7 +63,7 @@ summary(m3)
 
 
 
-# Negative Sentiments 
+# Analyzing Negative Sentiments 
 
 ## Setting wAIC 
 
@@ -104,7 +104,7 @@ summary(n0)
 ```
 
 
-# Fear 
+# Analyzing Tweets with Fear 
 
 ## Getting wAIC
 
@@ -141,7 +141,7 @@ pacf(data$fear)
 summary(f0)
 ```
 
-# Sad 
+# Analyzing Sad Tweets 
 
 ## Getting wAIC
 
@@ -175,7 +175,7 @@ pacf(data$sadness)
 summary(s0)
 ```
 
-# Disgust
+# Analyzing Disgust Tweets
 
 ## Getting wAIC
 
@@ -218,7 +218,7 @@ pacf(data$disgust)
 summary(d0)
 ```
 
-# Anger 
+# Analyzing Tweets with Anger 
 
 ## Getting wAiC
 
