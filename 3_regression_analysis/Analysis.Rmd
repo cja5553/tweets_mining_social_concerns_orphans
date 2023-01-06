@@ -1,0 +1,263 @@
+---
+title: "Visualization"
+author: "Charles Alba"
+date: "2022-12-24"
+output: pdf_document
+---
+
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(AER)
+library(vcd)
+
+data<-read.csv("sentimental_count.csv")
+colnames(data)[which(names(data) == "X")] <- "Date"
+data$Date<-as.character(data$Date)
+
+covid<-read.csv("COVID_cases.csv")
+covid$Date<-format(as.Date(covid$date), format="%m-%d")
+covid$covid_cases_per_10000<-(covid$covid_cases_per_10000)
+
+df<-merge(data,covid,by.x="Date",by.y="date",all.x = T)
+df$t<-1:NROW(df)
+```
+
+# Tweet Counts
+
+## wAIC scores
+
+
+```{r}
+m0 <- glm(Tweets ~ t + covid_cases_per_10000, data=df, family = "poisson")
+AIC(m0,k=2)
+m1 <- glm(Tweets ~ t +lag(Tweets)+ covid_cases_per_10000,data=df, family = "poisson")
+AIC(m1,k=3)
+m2 <- glm(Tweets ~ t +(lag(Tweets))+ lag(Tweets,n=2L)+covid_cases_per_10000, data=df, family = "poisson")
+AIC(m2,k=4)
+m3 <- glm(Tweets ~ t +lag(Tweets)+(lag(Tweets,n=2L))+ lag(Tweets,n=3L)+covid_cases_per_10000, data=df, family = "poisson")
+AIC(m3,k=5)
+m4 <- glm(Tweets ~ t +(lag(Tweets,n=4L))+lag(Tweets,3L)+(lag(Tweets,2L))+ lag(Tweets)+covid_cases_per_10000, data=df, family = "poisson")
+AIC(m4,k=6)
+```
+
+## Diagnostics
+
+```{r}
+acf(data$Tweets)
+pacf(data$Tweets)
+vif(m3)
+dispersiontest(m3)
+dispersiontest(m3, alternative = "less")
+
+```
+## Summary of results. 
+
+```{r}
+summary(m3)
+```
+
+
+
+# Negative Sentiments 
+
+## Setting wAIC 
+
+
+```{r}
+n0 <- glm(sentiment_NEG ~ t + covid_cases_per_10000, family="poisson", data=df)
+AIC(n0,k=2)
+
+n1 <- glm(sentiment_NEG ~ t + lag(sentiment_NEG)+covid_cases_per_10000, family="poisson", data=df)
+AIC(n1,k=3)
+
+n2 <- glm(sentiment_NEG ~ t + lag(sentiment_NEG)+(lag(sentiment_NEG,n=2L))+covid_cases_per_10000, family="poisson", data=df)
+AIC(n2,k=4)
+
+
+n3 <- glm(sentiment_NEG ~ t + lag(sentiment_NEG)+lag(sentiment_NEG,n=2L)+(lag(sentiment_NEG,n=3L))+covid_cases_per_10000, family="poisson", data=df)
+AIC(n3,k=5)
+
+
+```
+
+
+
+## plotting diagnostics
+
+```{r}
+vif(n0)
+dispersiontest(n0)
+dispersiontest(n0, alternative = "less")
+acf(data$sentiment_NEG)
+pacf(data$sentiment_NEG)
+```
+
+## Getting summary
+
+```{r}
+summary(n0)
+```
+
+
+# Fear 
+
+## Getting wAIC
+
+```{r}
+f0 <- glm(fear ~ t + covid_cases_per_10000, data=df, family="poisson")
+AIC(f0,k=2)
+
+f1 <- glm(fear ~ t + covid_cases_per_10000+lag(fear), data=df,family="poisson")
+AIC(f1,k=3)
+
+
+f2 <- glm(fear ~ t + covid_cases_per_10000+lag(fear)+lag(fear,n=2L), data=df,family="poisson")
+AIC(f2,k=4)
+
+
+f3 <- glm(fear ~ t + covid_cases_per_10000+lag(fear)+lag(fear,n=2L)+lag(fear,n=3L), data=df,family="poisson")
+AIC(f3,k=5)
+```
+
+
+## Plotting diagnostics
+
+```{r}
+vif(f0)
+dispersiontest(f0)
+dispersiontest(f0,alternative = "less")
+acf(data$fear)
+pacf(data$fear)
+```
+
+## Getting summary
+
+```{r}
+summary(f0)
+```
+
+# Sad 
+
+## Getting wAIC
+
+```{r}
+s0 <- glm(sadness ~ t + covid_cases_per_10000, family="poisson", data=df)
+AIC(s0,k=2)
+s1 <- glm(sadness ~ t + covid_cases_per_10000+lag(sadness), family="poisson", data=df)
+AIC(s1,k=3)
+s2 <- glm(sadness ~ t + covid_cases_per_10000+lag(sadness)+lag(sadness,n=2L), family="poisson", data=df)
+AIC(s2,k=4)
+s3 <- glm(sadness ~ t + covid_cases_per_10000+lag(sadness)+lag(sadness,n=2L)+lag(sadness,n=3L), family="poisson", data=df)
+AIC(s3,k=5)
+s4 <- glm(sadness ~ t + covid_cases_per_10000+lag(sadness)+lag(sadness,n=2L)+lag(sadness,n=3L)+lag(sadness,n=4L), family="poisson", data=df)
+AIC(s4,k=6)
+```
+
+
+## plotting diagnostics
+
+
+```{r}
+vif(s0)
+dispersiontest(s0)
+dispersiontest(s0,alternative = "less")
+acf(data$sadness)
+pacf(data$sadness)
+```
+## Getting summary.
+
+```{r}
+summary(s0)
+```
+
+# Disgust
+
+## Getting wAIC
+
+
+
+
+```{r}
+d0 <- glm(disgust ~ t + covid_cases_per_10000, family="poisson", data=df)
+AIC(d0,k=2)
+
+d1 <- glm(disgust ~ t + covid_cases_per_10000+lag(disgust), family="poisson", data=df)
+AIC(d1,k=3)
+
+
+d2 <- glm(disgust ~ t + covid_cases_per_10000+lag(disgust)+lag(disgust,n=2L), family="poisson", data=df)
+AIC(d2,k=4)
+
+
+d3 <- glm(disgust ~ t + covid_cases_per_10000+lag(disgust)+lag(disgust,n=2L)+lag(disgust,n=3L), family="poisson", data=df)
+AIC(d3,k=5)
+
+d4 <- glm(disgust ~ t + covid_cases_per_10000+lag(disgust)+lag(disgust,n=2L)+lag(disgust,n=3L)+lag(disgust,n=4L), family="poisson", data=df)
+AIC(d4,k=6)
+```
+
+## Plotting diagnostics
+
+
+```{r}
+vif(d0)
+dispersiontest(d0)
+dispersiontest(d0,alternative = "less")
+acf(data$disgust)
+pacf(data$disgust)
+```
+
+## getting summary
+
+```{r}
+summary(d0)
+```
+
+# Anger 
+
+## Getting wAiC
+
+```{r}
+a0 <- glm(anger ~ t + covid_cases_per_10000, family="poisson", data=df)
+AIC(a0,k=2)
+
+a1 <- glm(anger ~ t + covid_cases_per_10000+lag(anger), family="poisson", data=df)
+AIC(a1,k=3)
+
+
+a2 <- glm(anger ~ t + covid_cases_per_10000+lag(anger)+lag(anger,n=2L), family="poisson", data=df)
+AIC(a2,k=4)
+
+
+a3 <- glm(anger ~ t + covid_cases_per_10000+lag(anger)+lag(anger,n=2L)+lag(anger,n=3L), family="poisson", data=df)
+AIC(a3,k=5)
+
+a4 <- glm(anger ~ t + covid_cases_per_10000+lag(anger)+lag(anger,n=2L)+lag(anger,n=3L)+lag(anger,n=4L), family="poisson", data=df)
+AIC(a4,k=6)
+
+
+
+```
+
+## PLotting diagnostics
+
+```{r}
+vif(a0)
+pacf(df$anger)
+acf(df$anger)
+dispersiontest(a0)
+dispersiontest(a0,alternative = "less")
+
+```
+
+## Getting summary
+```{r}
+summary(a0)
+```
+
+
