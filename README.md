@@ -13,3 +13,9 @@ While the impact of COVID-19 on society has been widely studied, research on the
 ## Research Design & Methods
 
 Data Cleaning --> Text Analysis (Topic Modeling & Sentiment/Emotion classification) --> Regression Analysis (includes visualization)
+
+## Data
+
+The "Coronavirus (covid19) Tweets dataset" is publicly available at https://www.kaggle.com/datasets/smid80/coronavirus-covid19-tweets. Due to Twitters terms & conditions, the data cannot be shared via this repository. Please refer to the link for the dataset. 
+
+The “John Hopkins University Center for Systems Science and Engineering COVID-19 Data” is publicly available at https://ourworldindata.org/coronavirus. Due to owid's terms & conditions, the data cannot be shared via this repository. Please refer to the link for the dataset. 
