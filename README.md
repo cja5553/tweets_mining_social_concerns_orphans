@@ -3,7 +3,7 @@ Authors: C Alba, E Walken
 
 Submitted to Information Discovery & Delivery
 
-Please Cite as: Alba, C (2022). Applications of social-media mining in examining the social concerns of orphans during the early stages of the COVID-19 pandemic. Working Paper
+Please Cite as: Applications of social-media mining in examining the social concerns of orphans during the early stages of the COVID-19 pandemic. Working Paper
 
 ## Abstract
 
