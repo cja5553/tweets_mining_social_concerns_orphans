@@ -1,5 +1,5 @@
 # Title: Applications of social-media mining in examining the social concerns of orphans during the early stages of the COVID-19 pandemic
-Author: Charles Alba
+Authors: C Alba, E Walken
 
 Submitted to Information Discovery & Delivery
 
